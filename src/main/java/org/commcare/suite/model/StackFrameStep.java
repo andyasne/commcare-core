@@ -220,7 +220,11 @@ public class StackFrameStep implements Externalizable {
                 StackFrameStep defined = new StackFrameStep(elementType, id, evaluateValue(ec));
                 extras.forEach((key, value) -> {
                     if (value instanceof QueryData) {
-                        defined.addExtra(key, ((QueryData)value).getValues(ec));
+                        defined.getExtras().putAll(key, ((QueryData)value).getValues(ec));
+                    } else if (value instanceof XPathExpression) {
+                        // only to maintain backward compatibility with old serialised app db state, can be removed in
+                        // subsequent deploys
+                        defined.addExtra(key, FunctionUtils.toString(((XPathExpression)value).eval(ec)));
                     } else {
                         throw new RuntimeException("Invalid data type for step extra " + key);
                     }

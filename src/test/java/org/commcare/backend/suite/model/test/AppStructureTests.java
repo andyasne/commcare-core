@@ -127,6 +127,12 @@ public class AppStructureTests {
     }
 
     @Test
+    public void testDetailSelectText() {
+        Text selectText = mApp.getSession().getPlatform().getDetail("m0_case_short").getSelectText();
+        Assert.assertEquals("Continue With Case", selectText.evaluate());
+    }
+
+    @Test
     public void testDemoUserRestoreParsing() throws Exception {
         // Test parsing an app with a properly-formed demo user restore file
         MockApp appWithGoodUserRestore = new MockApp("/app_with_good_demo_restore/");
@@ -228,6 +234,14 @@ public class AppStructureTests {
     }
 
     @Test
+    public void testDetailWithAltText() {
+        Detail detail = mApp.getSession().getPlatform().getDetail("m0_case_short");
+        DetailField field = detail.getFields()[0];
+        Text altText = field.getAltText();
+        assertEquals("gold star", altText.evaluate());
+    }
+
+    @Test
     public void testDetailWithBorder() {
         Detail detail = mApp.getSession().getPlatform().getDetail("m0_case_short");
         DetailField field1 = detail.getFields()[0];
@@ -239,6 +253,12 @@ public class AppStructureTests {
         Detail detail = mApp.getSession().getPlatform().getDetail("m0_case_short");
         DetailField field1 = detail.getFields()[0];
         assertTrue(field1.getShowShading());
+    }
+
+    @Test
+    public void testDetailWithLazyLoadingSet() {
+        Detail detail = mApp.getSession().getPlatform().getDetail("m0_case_short");
+        assertTrue(detail.isLazyLoading());
     }
 
     @Test

@@ -55,7 +55,6 @@ import java.util.HashMap;
 import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
 import java.util.NoSuchElementException;
 import java.util.Vector;
 
@@ -780,6 +779,7 @@ public class FormDef implements IFormElement, IMetaData,
      *                          children have already been queued to be
      *                          triggered.
      */
+    @Trace
     private void fillTriggeredElements(Triggerable t,
                                        List<Triggerable> destination,
                                        boolean isRepeatEntryInit) {
@@ -1853,5 +1853,14 @@ public class FormDef implements IFormElement, IMetaData,
         } else {
             return sendCalloutHandler.performHttpCalloutForResponse(url, paramMap);
         }
+    }
+
+    // Checks if the form element at given form Index belongs to a non counted repeat
+    public boolean isNonCountedRepeat(FormIndex formIndex) {
+        IFormElement currentElement = getChild(formIndex);
+        if (currentElement instanceof GroupDef && ((GroupDef)currentElement).isRepeat()) {
+            return ((GroupDef)currentElement).getCountReference() == null;
+        }
+        return false;
     }
 }
